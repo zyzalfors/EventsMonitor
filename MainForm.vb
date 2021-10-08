@@ -8,23 +8,27 @@ Public Class MainForm
     Private Declare Function RemoveClipboardFormatListener Lib "user32.dll" (hWnd As IntPtr) As Boolean
     Public Delegate Function KeyboardHookDelegate(Code As Int32, wParam As Int32, ByRef lParam As KBDLLHOOKSTRUCT) _
     As Int32
+    Public KeyboardHookDelegateInst As KeyboardHookDelegate = New KeyboardHookDelegate(AddressOf KeyboardHookProc)
     Public Delegate Function MouseHookDelegate(Code As Int32, wParam As Int32, ByRef lParam As MSLLHOOKSTRUCT) _
     As Int32
+    Public MouseHookDelegateInst As MouseHookDelegate = New MouseHookDelegate(AddressOf MouseHookProc)
     Private Declare Function SetWindowsHookKB Lib "user32.dll" Alias "SetWindowsHookExA" (idHook As Int32, lpfn As KeyboardHookDelegate, hmod As Int32, dwThreadId As Int32) As Int32
     Private Declare Function SetWindowsHookMS Lib "user32.dll" Alias "SetWindowsHookExA" (idHook As Int32, lpfn As MouseHookDelegate, hmod As Int32, dwThreadId As Int32) As Int32
     Private Declare Function UnhookWindowsHookEx Lib "user32.dll" (idHook As Int32) As Boolean
     Private Declare Function MapVirtualKeyA Lib "user32.dll" (vkCode As Int32, mapType As Int32) As Int32
     Private Const WM_CLIPBOARDUPDATE As Int32 = &H31D
-    Private Const WH_KEYBOARD_LL As Int32 = 13&
-    Private Const MAPVK_VK_TO_CHAR As Int32 = 2&
-    Private Const WM_KEYDOWN As Int32 = &H100
     Private Const WM_LBUTTONDOWN As Int32 = &H201
     Private Const WM_RBUTTONDOWN As Int32 = &H204
     Private Const WM_SYSKEYDOWN As Int32 = &H104
+    Private Const WM_KEYDOWN As Int32 = &H100
     Private Const WH_MOUSE_LL As Int32 = 14&
+    Private Const WM_MOUSEWHEEL As Int32 = &H20A
+    Private Const WM_MOUSEMOVE As Int32 = &H200
+    Private Const WH_KEYBOARD_LL As Int32 = 13&
+    Private Const MAPVK_VK_TO_CHAR As Int32 = 2&
     Private KBHook As Int32 = 0
     Private MSHook As Int32 = 0
-    Private Const ProgramName As String = "Events Monitor Version 1.0.4"
+    Private Const ProgramName As String = "Events Monitor Version 1.0.5"
 
     Public Structure KBDLLHOOKSTRUCT
         Public vkCode As Int32
@@ -109,6 +113,18 @@ Public Class MainForm
             Dim x As String = lParam.pt.x
             Dim y As String = lParam.pt.y
             Dim description As String = "Mouse right key pressed: (" + x + " , " + y + ")"
+            DataGridView.Rows.Add(now, description)
+            NumEventsLabel.Text = (Convert.ToUInt64(NumEventsLabel.Text) + 1).ToString()
+        ElseIf wParam = WM_MOUSEWHEEL Then
+            Dim x As String = lParam.pt.x
+            Dim y As String = lParam.pt.y
+            Dim description As String = "Mouse wheel rotated: (" + x + " , " + y + ")"
+            DataGridView.Rows.Add(now, description)
+            NumEventsLabel.Text = (Convert.ToUInt64(NumEventsLabel.Text) + 1).ToString()
+        ElseIf wParam = WM_MOUSEMOVE Then
+            Dim x As String = lParam.pt.x
+            Dim y As String = lParam.pt.y
+            Dim description As String = "Mouse cursor moved: (" + x + " , " + y + ")"
             DataGridView.Rows.Add(now, description)
             NumEventsLabel.Text = (Convert.ToUInt64(NumEventsLabel.Text) + 1).ToString()
         End If
@@ -210,7 +226,7 @@ Public Class MainForm
 
     Private Sub StartEndKeyMonitoring(sender As Object, e As EventArgs) Handles MonitorKeyCheck.Click
         If MonitorKeyCheck.Checked Then
-            KBHook = SetWindowsHookKB(WH_KEYBOARD_LL, New KeyboardHookDelegate(AddressOf KeyboardHookProc), 0, 0)
+            KBHook = SetWindowsHookKB(WH_KEYBOARD_LL, Me.KeyboardHookDelegateInst, 0, 0)
         Else
             UnhookWindowsHookEx(KBHook)
         End If
@@ -218,9 +234,10 @@ Public Class MainForm
 
     Private Sub StartEndMouseMonitoring(sender As Object, e As EventArgs) Handles MonitorMouseCheck.Click
         If MonitorMouseCheck.Checked Then
-            MSHook = SetWindowsHookMS(WH_MOUSE_LL, New MouseHookDelegate(AddressOf MouseHookProc), 0, 0)
+            MSHook = SetWindowsHookMS(WH_MOUSE_LL, Me.MouseHookDelegateInst, 0, 0)
         Else
             UnhookWindowsHookEx(MSHook)
         End If
     End Sub
+
 End Class
