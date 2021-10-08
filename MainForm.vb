@@ -216,7 +216,7 @@ Public Class MainForm
         End If
     End Sub
 
-    Private Sub MonitorMouseCheck_CheckedChanged(sender As Object, e As EventArgs) Handles MonitorMouseCheck.Click
+    Private Sub StartEndMouseMonitoring(sender As Object, e As EventArgs) Handles MonitorMouseCheck.Click
         If MonitorMouseCheck.Checked Then
             MSHook = SetWindowsHookMS(WH_MOUSE_LL, New MouseHookDelegate(AddressOf MouseHookProc), 0, 0)
         Else
