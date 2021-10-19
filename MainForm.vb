@@ -1,6 +1,5 @@
 ﻿Imports System.Collections.Specialized
 Imports System.IO
-Imports System.Runtime.InteropServices
 
 Public Class MainForm
 
@@ -28,8 +27,7 @@ Public Class MainForm
     Private Const MAPVK_VK_TO_CHAR As Int32 = 2&
     Private KBHook As Int32 = 0
     Private MSHook As Int32 = 0
-    Private Const ProgramName As String = "Events Monitor Version 1.0.5"
-
+    Private ReadOnly ProgramName As String = "Events Monitor" + Environment.NewLine + "Version: 1.0.6"
     Public Structure KBDLLHOOKSTRUCT
         Public vkCode As Int32
         Public scanCode As Int32
@@ -72,17 +70,17 @@ Public Class MainForm
             Dim now = DateAndTime.Now.ToLocalTime
             If My.Computer.Clipboard.ContainsText() Then
                 Dim description As String = "Copied text: " + My.Computer.Clipboard.GetText()
-                DataGridView.Rows.Add(now, description)
+                TableGrid.Rows.Add(now, description)
                 NumEventsLabel.Text = (Convert.ToUInt64(NumEventsLabel.Text) + 1).ToString()
             ElseIf My.Computer.Clipboard.ContainsImage Then
                 Dim img As Image = My.Computer.Clipboard.GetImage()
                 Dim bytes As Byte() = New ImageConverter().ConvertTo(img, GetType(Byte()))
                 Dim description As String = "Copied image: " + BytesToStringified(bytes)
-                DataGridView.Rows.Add(now, description)
+                TableGrid.Rows.Add(now, description)
                 NumEventsLabel.Text = (Convert.ToUInt64(NumEventsLabel.Text) + 1).ToString()
             ElseIf My.Computer.Clipboard.ContainsFileDropList Then
                 Dim description As String = "Copied/cutted: " + ListToStringified(My.Computer.Clipboard.GetFileDropList())
-                DataGridView.Rows.Add(now, description)
+                TableGrid.Rows.Add(now, description)
                 NumEventsLabel.Text = (Convert.ToUInt64(NumEventsLabel.Text) + 1).ToString()
             End If
         End If
@@ -95,7 +93,7 @@ Public Class MainForm
             Dim vkCode As Int32 = lParam.vkCode
             Dim ch As String = If(MapVirtualKeyA(vkCode, MAPVK_VK_TO_CHAR) = 0, "0x" + Hex(vkCode), "0x" + Hex(vkCode) + " " + Chr(MapVirtualKeyA(vkCode, MAPVK_VK_TO_CHAR)))
             Dim description As String = "Key pressed: " + ch
-            DataGridView.Rows.Add(now, description)
+            TableGrid.Rows.Add(now, description)
             NumEventsLabel.Text = (Convert.ToUInt64(NumEventsLabel.Text) + 1).ToString()
         End If
         Return 0
@@ -107,56 +105,56 @@ Public Class MainForm
             Dim x As String = lParam.pt.x
             Dim y As String = lParam.pt.y
             Dim description As String = "Mouse left key pressed: (" + x + " , " + y + ")"
-            DataGridView.Rows.Add(now, description)
+            TableGrid.Rows.Add(now, description)
             NumEventsLabel.Text = (Convert.ToUInt64(NumEventsLabel.Text) + 1).ToString()
         ElseIf wParam = WM_RBUTTONDOWN Then
             Dim x As String = lParam.pt.x
             Dim y As String = lParam.pt.y
             Dim description As String = "Mouse right key pressed: (" + x + " , " + y + ")"
-            DataGridView.Rows.Add(now, description)
+            TableGrid.Rows.Add(now, description)
             NumEventsLabel.Text = (Convert.ToUInt64(NumEventsLabel.Text) + 1).ToString()
         ElseIf wParam = WM_MOUSEWHEEL Then
             Dim x As String = lParam.pt.x
             Dim y As String = lParam.pt.y
             Dim description As String = "Mouse wheel rotated: (" + x + " , " + y + ")"
-            DataGridView.Rows.Add(now, description)
+            TableGrid.Rows.Add(now, description)
             NumEventsLabel.Text = (Convert.ToUInt64(NumEventsLabel.Text) + 1).ToString()
         ElseIf wParam = WM_MOUSEMOVE Then
             Dim x As String = lParam.pt.x
             Dim y As String = lParam.pt.y
             Dim description As String = "Mouse cursor moved: (" + x + " , " + y + ")"
-            DataGridView.Rows.Add(now, description)
+            TableGrid.Rows.Add(now, description)
             NumEventsLabel.Text = (Convert.ToUInt64(NumEventsLabel.Text) + 1).ToString()
         End If
         Return 0
     End Function
 
-    Private Sub OnRenamed(sender As Object, e As RenamedEventArgs) Handles FileSystemWatcher.Renamed
+    Private Sub OnRenamed(sender As Object, e As RenamedEventArgs) Handles FileSystemListener.Renamed
         Dim now = DateAndTime.Now.ToLocalTime
         Dim description As String = "Renamed: " + e.OldFullPath + " --> " + e.FullPath
-        DataGridView.Rows.Add(now, description)
+        TableGrid.Rows.Add(now, description)
         NumEventsLabel.Text = (Convert.ToUInt64(NumEventsLabel.Text) + 1).ToString()
     End Sub
 
-    Private Sub OnDeleted(sender As Object, e As FileSystemEventArgs) Handles FileSystemWatcher.Deleted
+    Private Sub OnDeleted(sender As Object, e As FileSystemEventArgs) Handles FileSystemListener.Deleted
         Dim now = DateAndTime.Now.ToLocalTime
         Dim description As String = "Deleted: " + e.FullPath
-        DataGridView.Rows.Add(now, description)
+        TableGrid.Rows.Add(now, description)
         NumEventsLabel.Text = (Convert.ToUInt64(NumEventsLabel.Text) + 1).ToString()
     End Sub
 
-    Private Sub OnCreated(sender As Object, e As FileSystemEventArgs) Handles FileSystemWatcher.Created
+    Private Sub OnCreated(sender As Object, e As FileSystemEventArgs) Handles FileSystemListener.Created
         Dim now = DateAndTime.Now.ToLocalTime
         Dim description As String = "Created: " + e.FullPath
-        DataGridView.Rows.Add(now, description)
+        TableGrid.Rows.Add(now, description)
         NumEventsLabel.Text = (Convert.ToUInt64(NumEventsLabel.Text) + 1).ToString()
     End Sub
 
-    Private Sub OnChanged(sender As Object, e As FileSystemEventArgs) Handles FileSystemWatcher.Changed
+    Private Sub OnChanged(sender As Object, e As FileSystemEventArgs) Handles FileSystemListener.Changed
         Dim now = DateAndTime.Now.ToLocalTime
         If e.ChangeType = WatcherChangeTypes.Changed Then
             Dim description As String = "Changed: " + e.FullPath
-            DataGridView.Rows.Add(now, description)
+            TableGrid.Rows.Add(now, description)
             NumEventsLabel.Text = (Convert.ToUInt64(NumEventsLabel.Text) + 1).ToString()
         End If
     End Sub
@@ -169,29 +167,29 @@ Public Class MainForm
         If MonitorDirCheck.Checked Then
             Dim path As String = FormatPath(DirText.Text.Trim())
             If (Directory.Exists(path)) Then
-                Me.FileSystemWatcher.Path = path
-                Me.FileSystemWatcher.EnableRaisingEvents = True
+                Me.FileSystemListener.Path = path
+                Me.FileSystemListener.EnableRaisingEvents = True
             Else
                 MessageBox.Show("Directory '" + path + "' not found", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 MonitorDirCheck.Checked = False
             End If
         Else
-            Me.FileSystemWatcher.EnableRaisingEvents = False
+            Me.FileSystemListener.EnableRaisingEvents = False
         End If
     End Sub
 
     Private Sub ClearData(sender As Object, e As EventArgs) Handles ClearButton.Click
-        DataGridView.Rows.Clear()
+        TableGrid.Rows.Clear()
         NumEventsLabel.Text = "0"
     End Sub
 
     Private Sub OpenSaveDialog(sender As Object, e As EventArgs) Handles SaveLabel.Click
-        SaveFileDialog.ShowDialog()
+        SaveDialog.ShowDialog()
     End Sub
 
-    Private Sub SaveFileOnOK(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles SaveFileDialog.FileOk
-        Dim FilePath As String = SaveFileDialog.FileName
-        Dim rows As DataGridViewRowCollection = DataGridView.Rows
+    Private Sub SaveFileOnOK(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles SaveDialog.FileOk
+        Dim FilePath As String = SaveDialog.FileName
+        Dim rows As DataGridViewRowCollection = TableGrid.Rows
         Dim FileWriter As New System.IO.StreamWriter(FilePath)
         FileWriter.WriteLine(ProgramName + Environment.NewLine)
         For Each row In rows
@@ -207,12 +205,12 @@ Public Class MainForm
         MessageBox.Show(info, "Info", MessageBoxButtons.OK, MessageBoxIcon.Information)
     End Sub
 
-    Private Sub EnableSave(sender As Object, e As DataGridViewRowsAddedEventArgs) Handles DataGridView.RowsAdded
+    Private Sub EnableSave(sender As Object, e As DataGridViewRowsAddedEventArgs) Handles TableGrid.RowsAdded
         SaveLabel.Enabled = True
-        DataGridView.FirstDisplayedScrollingRowIndex = DataGridView.Rows.Count - 1
+        TableGrid.FirstDisplayedScrollingRowIndex = TableGrid.Rows.Count - 1
     End Sub
 
-    Private Sub DisableSave(sender As Object, e As DataGridViewRowsRemovedEventArgs) Handles DataGridView.RowsRemoved
+    Private Sub DisableSave(sender As Object, e As DataGridViewRowsRemovedEventArgs) Handles TableGrid.RowsRemoved
         SaveLabel.Enabled = False
     End Sub
 
@@ -240,4 +238,20 @@ Public Class MainForm
         End If
     End Sub
 
+    Private Sub ClearDataGrid(sender As Object, e As EventArgs) Handles ClearMenuItem.Click
+        TableGrid.Rows.Clear()
+        NumEventsLabel.Text = "0"
+    End Sub
+
+    Private Sub CopySelectedRows(sender As Object, e As EventArgs) Handles CopyMenuItem.Click
+        Dim RowsColl As DataGridViewSelectedRowCollection = TableGrid.SelectedRows
+        If RowsColl.Count > 0 Then
+            Dim RowsList As StringCollection = New StringCollection()
+            For Each row In RowsColl
+                RowsList.Add(row.Cells(0).Value + "  " + row.Cells(1).value)
+            Next row
+            Dim StringifiedList As String = ListToStringified(RowsList)
+            My.Computer.Clipboard.SetText(StringifiedList)
+        End If
+    End Sub
 End Class
