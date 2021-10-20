@@ -28,6 +28,7 @@ Public Class MainForm
     Private KBHook As Int32 = 0
     Private MSHook As Int32 = 0
     Private ReadOnly ProgramName As String = "Events Monitor" + Environment.NewLine + "Version: 1.0.6"
+                                    
     Public Structure KBDLLHOOKSTRUCT
         Public vkCode As Int32
         Public scanCode As Int32
