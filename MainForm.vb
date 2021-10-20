@@ -58,7 +58,7 @@ Public Class MainForm
         Return stringified.Substring(0, stringified.Length - 1)
     End Function
 
-    Private Function ListToStringified(strings As StringCollection)
+    Private Function ListToStringified(strings As StringCollection) As String
         Dim stringified As String = ""
         For Each value In strings
             stringified += value + Environment.NewLine
