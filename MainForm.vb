@@ -209,7 +209,7 @@ Public Class MainForm
     Private Sub EnableSave(sender As Object, e As DataGridViewRowsAddedEventArgs) Handles TableGrid.RowsAdded
         SaveLabel.Enabled = True
         TableGrid.FirstDisplayedScrollingRowIndex = TableGrid.Rows.Count - 1
-        If WriteOnFile Then
+        If WriteOnFileCheck.Checked Then
             Dim row As DataGridViewRow = TableGrid.Rows(e.RowIndex)
             Using writer As StreamWriter = New StreamWriter(File.Open("events.txt", FileMode.Append))
                 writer.WriteLine(row.Cells(0).Value + Environment.NewLine + row.Cells(1).Value + Environment.NewLine)
@@ -263,7 +263,4 @@ Public Class MainForm
         End If
     End Sub
 
-    Private Sub StartEndFileWriting(sender As Object, e As EventArgs) Handles WriteOnFileCheck.Click
-        WriteOnFile = WriteOnFileCheck.Checked
-    End Sub
 End Class
