@@ -5,11 +5,9 @@ Public Class MainForm
 
     Private Declare Function AddClipboardFormatListener Lib "user32.dll" (hWnd As IntPtr) As Boolean
     Private Declare Function RemoveClipboardFormatListener Lib "user32.dll" (hWnd As IntPtr) As Boolean
-    Public Delegate Function KeyboardHookDelegate(Code As Int32, wParam As Int32, ByRef lParam As KBDLLHOOKSTRUCT) _
-    As Int32
+    Public Delegate Function KeyboardHookDelegate(Code As Int32, wParam As Int32, ByRef lParam As KBDLLHOOKSTRUCT) As Int32
     Public KeyboardHookDelegateInst As KeyboardHookDelegate = New KeyboardHookDelegate(AddressOf KeyboardHookProc)
-    Public Delegate Function MouseHookDelegate(Code As Int32, wParam As Int32, ByRef lParam As MSLLHOOKSTRUCT) _
-    As Int32
+    Public Delegate Function MouseHookDelegate(Code As Int32, wParam As Int32, ByRef lParam As MSLLHOOKSTRUCT) As Int32
     Public MouseHookDelegateInst As MouseHookDelegate = New MouseHookDelegate(AddressOf MouseHookProc)
     Private Declare Function SetWindowsHookKB Lib "user32.dll" Alias "SetWindowsHookExA" (idHook As Int32, lpfn As KeyboardHookDelegate, hmod As Int32, dwThreadId As Int32) As Int32
     Private Declare Function SetWindowsHookMS Lib "user32.dll" Alias "SetWindowsHookExA" (idHook As Int32, lpfn As MouseHookDelegate, hmod As Int32, dwThreadId As Int32) As Int32
@@ -27,8 +25,10 @@ Public Class MainForm
     Private Const MAPVK_VK_TO_CHAR As Int32 = 2&
     Private KBHook As Int32 = 0
     Private MSHook As Int32 = 0
-    Private ReadOnly ProgramName As String = "Events Monitor" + Environment.NewLine + "Version: 1.0.6"
-                                    
+    Private WriteOnFile As Boolean = False
+    Private ReadOnly ProgramName As String = "Events Monitor" + Environment.NewLine + "Version: 1.0.7"
+    Private ReadOnly Info As String = ProgramName + Environment.NewLine + "Developer: Al Armato" + Environment.NewLine + "Language: Visual Basic .NET"
+
     Public Structure KBDLLHOOKSTRUCT
         Public vkCode As Int32
         Public scanCode As Int32
@@ -191,24 +191,31 @@ Public Class MainForm
     Private Sub SaveFileOnOK(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles SaveDialog.FileOk
         Dim FilePath As String = SaveDialog.FileName
         Dim rows As DataGridViewRowCollection = TableGrid.Rows
-        Dim FileWriter As New System.IO.StreamWriter(FilePath)
-        FileWriter.WriteLine(ProgramName + Environment.NewLine)
-        For Each row In rows
-            FileWriter.WriteLine(row.Cells(0).Value + Environment.NewLine + row.Cells(1).Value + Environment.NewLine)
-        Next row
-        FileWriter.Close()
+        Using FileWriter As StreamWriter = New System.IO.StreamWriter(FilePath)
+            FileWriter.WriteLine(ProgramName + Environment.NewLine)
+            For Each row In rows
+                FileWriter.WriteLine(row.Cells(0).Value + Environment.NewLine + row.Cells(1).Value + Environment.NewLine)
+            Next row
+            FileWriter.Close()
+        End Using
         Dim choose As DialogResult = MessageBox.Show("File saved. Do you want to open it?", "Message", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
         If choose = DialogResult.Yes Then Process.Start(FilePath)
     End Sub
 
     Private Sub ShowInfo(sender As Object, e As EventArgs) Handles InfoLabel.Click
-        Dim info As String = ProgramName + Environment.NewLine + "Developer: Al Armato" + Environment.NewLine + "Language: Visual Basic .NET"
-        MessageBox.Show(info, "Info", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        MessageBox.Show(Info, "Info", MessageBoxButtons.OK, MessageBoxIcon.Information)
     End Sub
 
     Private Sub EnableSave(sender As Object, e As DataGridViewRowsAddedEventArgs) Handles TableGrid.RowsAdded
         SaveLabel.Enabled = True
         TableGrid.FirstDisplayedScrollingRowIndex = TableGrid.Rows.Count - 1
+        If WriteOnFile Then
+            Dim row As DataGridViewRow = TableGrid.Rows(e.RowIndex)
+            Using writer As StreamWriter = New StreamWriter(File.Open("events.txt", FileMode.Append))
+                writer.WriteLine(row.Cells(0).Value + Environment.NewLine + row.Cells(1).Value + Environment.NewLine)
+                writer.Close()
+            End Using
+        End If
     End Sub
 
     Private Sub DisableSave(sender As Object, e As DataGridViewRowsRemovedEventArgs) Handles TableGrid.RowsRemoved
@@ -254,5 +261,9 @@ Public Class MainForm
             Dim StringifiedList As String = ListToStringified(RowsList)
             My.Computer.Clipboard.SetText(StringifiedList)
         End If
+    End Sub
+
+    Private Sub StartEndFileWriting(sender As Object, e As EventArgs) Handles WriteOnFileCheck.Click
+        WriteOnFile = WriteOnFileCheck.Checked
     End Sub
 End Class

@@ -39,6 +39,7 @@ Partial Class MainForm
         Me.MonitorClipCheck = New System.Windows.Forms.CheckBox()
         Me.MonitorKeyCheck = New System.Windows.Forms.CheckBox()
         Me.MonitorMouseCheck = New System.Windows.Forms.CheckBox()
+        Me.WriteOnFileCheck = New System.Windows.Forms.CheckBox()
         CType(Me.FileSystemListener, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.TableGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ContextMenu.SuspendLayout()
@@ -150,7 +151,7 @@ Partial Class MainForm
         Me.ToolBar.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SaveLabel, Me.InfoLabel})
         Me.ToolBar.Location = New System.Drawing.Point(0, 0)
         Me.ToolBar.Name = "ToolBar"
-        Me.ToolBar.Size = New System.Drawing.Size(800, 25)
+        Me.ToolBar.Size = New System.Drawing.Size(1000, 39)
         Me.ToolBar.TabIndex = 3
         Me.ToolBar.Text = "ToolBar"
         '
@@ -240,6 +241,16 @@ Partial Class MainForm
         Me.MonitorMouseCheck.Text = "Monitor mouse"
         Me.MonitorMouseCheck.UseVisualStyleBackColor = True
         '
+        'WriteOnFileCheck
+        '
+        Me.WriteOnFileCheck.AutoSize = True
+        Me.WriteOnFileCheck.Location = New System.Drawing.Point(10, 60)
+        Me.WriteOnFileCheck.Name = "WriteOnFileCheck"
+        Me.WriteOnFileCheck.Size = New System.Drawing.Size(131, 26)
+        Me.WriteOnFileCheck.TabIndex = 11
+        Me.WriteOnFileCheck.Text = "Write on file"
+        Me.WriteOnFileCheck.UseVisualStyleBackColor = True
+        '
         'MainForm
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
@@ -248,6 +259,7 @@ Partial Class MainForm
         Me.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
         Me.ClientSize = New System.Drawing.Size(800, 590)
+        Me.Controls.Add(Me.WriteOnFileCheck)
         Me.Controls.Add(Me.MonitorMouseCheck)
         Me.Controls.Add(Me.MonitorKeyCheck)
         Me.Controls.Add(Me.MonitorClipCheck)
@@ -293,4 +305,5 @@ Partial Class MainForm
     Friend WithEvents ContextMenu As ContextMenuStrip
     Friend WithEvents CopyMenuItem As ToolStripMenuItem
     Friend WithEvents ClearMenuItem As ToolStripMenuItem
+    Friend WithEvents WriteOnFileCheck As CheckBox
 End Class
