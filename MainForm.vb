@@ -25,7 +25,6 @@ Public Class MainForm
     Private Const MAPVK_VK_TO_CHAR As Int32 = 2&
     Private KBHook As Int32 = 0
     Private MSHook As Int32 = 0
-    Private WriteOnFile As Boolean = False
     Private ReadOnly ProgramName As String = "Events Monitor" + Environment.NewLine + "Version: 1.0.7"
     Private ReadOnly Info As String = ProgramName + Environment.NewLine + "Developer: Al Armato" + Environment.NewLine + "Language: Visual Basic .NET"
 
