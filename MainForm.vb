@@ -25,7 +25,7 @@ Public Class MainForm
     Private Const MAPVK_VK_TO_CHAR As Int32 = 2&
     Private KBHook As Int32 = 0
     Private MSHook As Int32 = 0
-    Private ReadOnly ProgramName As String = "Events Monitor" + Environment.NewLine + "Version: 1.0.7"
+    Private ReadOnly ProgramName As String = "Events Monitor" + Environment.NewLine + "Version: 1.0.8"
     Private ReadOnly Info As String = ProgramName + Environment.NewLine + "Developer: Al Armato" + Environment.NewLine + "Language: Visual Basic .NET"
 
     Public Structure KBDLLHOOKSTRUCT
@@ -262,4 +262,15 @@ Public Class MainForm
         End If
     End Sub
 
+    Private Sub WrapUnwrapText(sender As Object, e As EventArgs) Handles UnwrapCheck.CheckedChanged
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.DarkBlue
+        If UnwrapCheck.Checked Then
+            DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+            Me.TableGrid.DefaultCellStyle = DataGridViewCellStyle1
+        Else
+            DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+            Me.TableGrid.DefaultCellStyle = DataGridViewCellStyle1
+        End If
+    End Sub
 End Class

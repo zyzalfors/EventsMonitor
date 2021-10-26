@@ -19,6 +19,8 @@ Partial Class MainForm
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.FileSystemListener = New System.IO.FileSystemWatcher()
         Me.TableGrid = New System.Windows.Forms.DataGridView()
         Me.TimestampColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -40,6 +42,7 @@ Partial Class MainForm
         Me.MonitorKeyCheck = New System.Windows.Forms.CheckBox()
         Me.MonitorMouseCheck = New System.Windows.Forms.CheckBox()
         Me.WriteOnFileCheck = New System.Windows.Forms.CheckBox()
+        Me.UnwrapCheck = New System.Windows.Forms.CheckBox()
         CType(Me.FileSystemListener, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.TableGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ContextMenu.SuspendLayout()
@@ -68,21 +71,37 @@ Partial Class MainForm
         Me.TableGrid.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells
         Me.TableGrid.BackgroundColor = System.Drawing.SystemColors.Window
         Me.TableGrid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle1.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.DarkBlue
+        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.ActiveCaption
+        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.TableGrid.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         Me.TableGrid.ColumnHeadersHeight = 29
         Me.TableGrid.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.TimestampColumn, Me.DescColumn})
         Me.TableGrid.ContextMenuStrip = Me.ContextMenu
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle1.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.GradientActiveCaption
-        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.TableGrid.DefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle2.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.DarkBlue
+        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.TableGrid.DefaultCellStyle = DataGridViewCellStyle2
         Me.TableGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
         Me.TableGrid.Location = New System.Drawing.Point(10, 90)
         Me.TableGrid.Name = "TableGrid"
         Me.TableGrid.ReadOnly = True
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle3.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.MenuHighlight
+        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.TableGrid.RowHeadersDefaultCellStyle = DataGridViewCellStyle3
         Me.TableGrid.RowHeadersWidth = 51
         Me.TableGrid.RowTemplate.Height = 24
         Me.TableGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
@@ -151,7 +170,7 @@ Partial Class MainForm
         Me.ToolBar.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SaveLabel, Me.InfoLabel})
         Me.ToolBar.Location = New System.Drawing.Point(0, 0)
         Me.ToolBar.Name = "ToolBar"
-        Me.ToolBar.Size = New System.Drawing.Size(1000, 39)
+        Me.ToolBar.Size = New System.Drawing.Size(800, 25)
         Me.ToolBar.TabIndex = 3
         Me.ToolBar.Text = "ToolBar"
         '
@@ -246,10 +265,20 @@ Partial Class MainForm
         Me.WriteOnFileCheck.AutoSize = True
         Me.WriteOnFileCheck.Location = New System.Drawing.Point(10, 60)
         Me.WriteOnFileCheck.Name = "WriteOnFileCheck"
-        Me.WriteOnFileCheck.Size = New System.Drawing.Size(131, 26)
+        Me.WriteOnFileCheck.Size = New System.Drawing.Size(105, 21)
         Me.WriteOnFileCheck.TabIndex = 11
         Me.WriteOnFileCheck.Text = "Write on file"
         Me.WriteOnFileCheck.UseVisualStyleBackColor = True
+        '
+        'UnwrapCheck
+        '
+        Me.UnwrapCheck.AutoSize = True
+        Me.UnwrapCheck.Location = New System.Drawing.Point(154, 60)
+        Me.UnwrapCheck.Name = "UnwrapCheck"
+        Me.UnwrapCheck.Size = New System.Drawing.Size(104, 21)
+        Me.UnwrapCheck.TabIndex = 12
+        Me.UnwrapCheck.Text = "Unwrap text"
+        Me.UnwrapCheck.UseVisualStyleBackColor = True
         '
         'MainForm
         '
@@ -259,6 +288,7 @@ Partial Class MainForm
         Me.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
         Me.ClientSize = New System.Drawing.Size(800, 590)
+        Me.Controls.Add(Me.UnwrapCheck)
         Me.Controls.Add(Me.WriteOnFileCheck)
         Me.Controls.Add(Me.MonitorMouseCheck)
         Me.Controls.Add(Me.MonitorKeyCheck)
@@ -272,6 +302,7 @@ Partial Class MainForm
         Me.Controls.Add(Me.DirLabel)
         Me.Controls.Add(Me.TableGrid)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
+        Me.MaximizeBox = False
         Me.Name = "MainForm"
         Me.ShowIcon = False
         Me.Text = "Events Monitor"
@@ -306,4 +337,5 @@ Partial Class MainForm
     Friend WithEvents CopyMenuItem As ToolStripMenuItem
     Friend WithEvents ClearMenuItem As ToolStripMenuItem
     Friend WithEvents WriteOnFileCheck As CheckBox
+    Friend WithEvents UnwrapCheck As CheckBox
 End Class
