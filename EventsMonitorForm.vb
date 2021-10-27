@@ -1,5 +1,6 @@
 ﻿Imports System.Collections.Specialized
 Imports System.IO
+
 Public Class EventsMonitorForm
     Private Declare Function AddClipboardFormatListener Lib "user32.dll" (hWnd As IntPtr) As Boolean
     Private Declare Function RemoveClipboardFormatListener Lib "user32.dll" (hWnd As IntPtr) As Boolean
@@ -25,6 +26,7 @@ Public Class EventsMonitorForm
     Private MSHook As Int32 = 0
     Private ReadOnly ProgramName As String = "Events Monitor" + Environment.NewLine + "Version: 1.0.8"
     Private ReadOnly Info As String = ProgramName + Environment.NewLine + "Developer: Al Armato" + Environment.NewLine + "Language: Visual Basic .NET"
+                                    
     Public Structure KBDLLHOOKSTRUCT
         Public vkCode As Int32
         Public scanCode As Int32
@@ -32,10 +34,12 @@ Public Class EventsMonitorForm
         Public time As Int32
         Public dwExtraInfo As Int32
     End Structure
+                                    
     Public Structure POINT
         Public x As Int32
         Public y As Int32
     End Structure
+                                    
     Public Structure MSLLHOOKSTRUCT
         Public pt As POINT
         Public mouseData As Int32
@@ -43,6 +47,7 @@ Public Class EventsMonitorForm
         Public time As Int32
         Public dwExtraInfo As Int32
     End Structure
+                                    
     Private Function BytesToStringified(bytes As Byte()) As String
         Dim stringified As String = ""
         For Each octet In bytes
@@ -50,6 +55,7 @@ Public Class EventsMonitorForm
         Next octet
         Return stringified.Substring(0, stringified.Length - 1)
     End Function
+                                
     Private Function ListToStringified(strings As StringCollection) As String
         Dim stringified As String = ""
         For Each value In strings
@@ -57,6 +63,7 @@ Public Class EventsMonitorForm
         Next value
         Return stringified.Substring(0, stringified.Length - 1)
     End Function
+                            
     Protected Overrides Sub WndProc(ByRef m As Message)
         If m.Msg = WM_CLIPBOARDUPDATE Then
             Dim now = DateAndTime.Now.ToLocalTime
@@ -78,6 +85,7 @@ Public Class EventsMonitorForm
         End If
         MyBase.WndProc(m)
     End Sub
+                            
     Protected Function KeyboardHookProc(Code As Int32, wParam As Int32, ByRef lParam As KBDLLHOOKSTRUCT) As Int32
         Dim now = DateAndTime.Now.ToLocalTime
         If wParam = WM_KEYDOWN Or wParam = WM_SYSKEYDOWN Then
@@ -89,6 +97,7 @@ Public Class EventsMonitorForm
         End If
         Return 0
     End Function
+                                
     Protected Function MouseHookProc(Code As Int32, wParam As Int32, ByRef lParam As MSLLHOOKSTRUCT) As Int32
         Dim now = DateAndTime.Now.ToLocalTime
         If wParam = WM_LBUTTONDOWN Then
@@ -118,24 +127,28 @@ Public Class EventsMonitorForm
         End If
         Return 0
     End Function
+                                
     Private Sub OnRenamed(sender As Object, e As RenamedEventArgs) Handles FileSystemListener.Renamed
         Dim now = DateAndTime.Now.ToLocalTime
         Dim description As String = "Renamed: " + e.OldFullPath + " --> " + e.FullPath
         TableGrid.Rows.Add(now, description)
         NumEventsLabel.Text = (Convert.ToUInt64(NumEventsLabel.Text) + 1).ToString()
     End Sub
+                                
     Private Sub OnDeleted(sender As Object, e As FileSystemEventArgs) Handles FileSystemListener.Deleted
         Dim now = DateAndTime.Now.ToLocalTime
         Dim description As String = "Deleted: " + e.FullPath
         TableGrid.Rows.Add(now, description)
         NumEventsLabel.Text = (Convert.ToUInt64(NumEventsLabel.Text) + 1).ToString()
     End Sub
+                                
     Private Sub OnCreated(sender As Object, e As FileSystemEventArgs) Handles FileSystemListener.Created
         Dim now = DateAndTime.Now.ToLocalTime
         Dim description As String = "Created: " + e.FullPath
         TableGrid.Rows.Add(now, description)
         NumEventsLabel.Text = (Convert.ToUInt64(NumEventsLabel.Text) + 1).ToString()
     End Sub
+                                
     Private Sub OnChanged(sender As Object, e As FileSystemEventArgs) Handles FileSystemListener.Changed
         Dim now = DateAndTime.Now.ToLocalTime
         If e.ChangeType = WatcherChangeTypes.Changed Then
@@ -144,6 +157,7 @@ Public Class EventsMonitorForm
             NumEventsLabel.Text = (Convert.ToUInt64(NumEventsLabel.Text) + 1).ToString()
         End If
     End Sub
+                                
     Public Function FormatPath(path As String) As String
         Return If(path.EndsWith(":"), System.Text.RegularExpressions.Regex.Replace(path + "\", "\\+", "\"), System.Text.RegularExpressions.Regex.Replace(path, "\\+", "\"))
     End Function
@@ -161,13 +175,16 @@ Public Class EventsMonitorForm
             Me.FileSystemListener.EnableRaisingEvents = False
         End If
     End Sub
+                                    
     Private Sub ClearData(sender As Object, e As EventArgs) Handles ClearButton.Click
         TableGrid.Rows.Clear()
         NumEventsLabel.Text = "0"
     End Sub
+                                    
     Private Sub OpenSaveDialog(sender As Object, e As EventArgs) Handles SaveLabel.Click
         SaveDialog.ShowDialog()
     End Sub
+                                    
     Private Sub SaveFileOnOK(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles SaveDialog.FileOk
         Dim FilePath As String = SaveDialog.FileName
         Dim rows As DataGridViewRowCollection = TableGrid.Rows
@@ -181,9 +198,11 @@ Public Class EventsMonitorForm
         Dim choose As DialogResult = MessageBox.Show("File saved. Do you want to open it?", "Message", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
         If choose = DialogResult.Yes Then Process.Start(FilePath)
     End Sub
+                                    
     Private Sub ShowInfo(sender As Object, e As EventArgs) Handles InfoLabel.Click
         MessageBox.Show(Info, "Info", MessageBoxButtons.OK, MessageBoxIcon.Information)
     End Sub
+                                    
     Private Sub EnableSave(sender As Object, e As DataGridViewRowsAddedEventArgs) Handles TableGrid.RowsAdded
         SaveLabel.Enabled = True
         TableGrid.FirstDisplayedScrollingRowIndex = TableGrid.Rows.Count - 1
@@ -195,9 +214,11 @@ Public Class EventsMonitorForm
             End Using
         End If
     End Sub
+                                    
     Private Sub DisableSave(sender As Object, e As DataGridViewRowsRemovedEventArgs) Handles TableGrid.RowsRemoved
         SaveLabel.Enabled = False
     End Sub
+                                    
     Private Sub StartEndClipMonitoring(sender As Object, e As EventArgs) Handles MonitorClipCheck.Click
         If MonitorClipCheck.Checked Then
             AddClipboardFormatListener(MyBase.Handle)
@@ -205,6 +226,7 @@ Public Class EventsMonitorForm
             RemoveClipboardFormatListener(MyBase.Handle)
         End If
     End Sub
+                                    
     Private Sub StartEndKeyMonitoring(sender As Object, e As EventArgs) Handles MonitorKeyCheck.Click
         If MonitorKeyCheck.Checked Then
             KBHook = SetWindowsHookKB(WH_KEYBOARD_LL, Me.KeyboardHookDelegateInst, 0, 0)
@@ -212,6 +234,7 @@ Public Class EventsMonitorForm
             UnhookWindowsHookEx(KBHook)
         End If
     End Sub
+                                    
     Private Sub StartEndMouseMonitoring(sender As Object, e As EventArgs) Handles MonitorMouseCheck.Click
         If MonitorMouseCheck.Checked Then
             MSHook = SetWindowsHookMS(WH_MOUSE_LL, Me.MouseHookDelegateInst, 0, 0)
@@ -219,10 +242,12 @@ Public Class EventsMonitorForm
             UnhookWindowsHookEx(MSHook)
         End If
     End Sub
+                                    
     Private Sub ClearDataGrid(sender As Object, e As EventArgs) Handles ClearMenuItem.Click
         TableGrid.Rows.Clear()
         NumEventsLabel.Text = "0"
     End Sub
+                                    
     Private Sub CopySelectedRows(sender As Object, e As EventArgs) Handles CopyMenuItem.Click
         Dim RowsColl As DataGridViewSelectedRowCollection = TableGrid.SelectedRows
         If RowsColl.Count > 0 Then
@@ -234,10 +259,12 @@ Public Class EventsMonitorForm
             My.Computer.Clipboard.SetText(StringifiedList)
         End If
     End Sub
+                                
     Private Sub WrapUnwrapText(sender As Object, e As EventArgs) Handles UnwrapCheck.CheckedChanged
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         DataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.DarkBlue
         DataGridViewCellStyle1.WrapMode = If(UnwrapCheck.Checked, System.Windows.Forms.DataGridViewTriState.[False], System.Windows.Forms.DataGridViewTriState.[True])
         Me.TableGrid.DefaultCellStyle = DataGridViewCellStyle1
     End Sub
+                            
 End Class
