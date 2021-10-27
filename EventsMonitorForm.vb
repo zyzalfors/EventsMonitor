@@ -2,6 +2,7 @@
 Imports System.IO
 
 Public Class EventsMonitorForm
+    
     Private Declare Function AddClipboardFormatListener Lib "user32.dll" (hWnd As IntPtr) As Boolean
     Private Declare Function RemoveClipboardFormatListener Lib "user32.dll" (hWnd As IntPtr) As Boolean
     Public Delegate Function KeyboardHookDelegate(Code As Int32, wParam As Int32, ByRef lParam As KBDLLHOOKSTRUCT) As Int32
