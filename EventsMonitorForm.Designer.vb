@@ -337,4 +337,5 @@ Partial Class EventsMonitorForm
     Friend WithEvents ClearMenuItem As ToolStripMenuItem
     Friend WithEvents WriteOnFileCheck As CheckBox
     Friend WithEvents UnwrapCheck As CheckBox
+
 End Class
