@@ -162,6 +162,7 @@ Public Class EventsMonitorForm
     Public Function FormatPath(path As String) As String
         Return If(path.EndsWith(":"), System.Text.RegularExpressions.Regex.Replace(path + "\", "\\+", "\"), System.Text.RegularExpressions.Regex.Replace(path, "\\+", "\"))
     End Function
+                                    
     Private Sub StartEndDirMonitoring(sender As Object, e As EventArgs) Handles MonitorDirCheck.Click
         If MonitorDirCheck.Checked Then
             Dim path As String = FormatPath(DirText.Text.Trim())
