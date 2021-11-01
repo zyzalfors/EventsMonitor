@@ -1,5 +1,6 @@
 ﻿Imports System.Collections.Specialized
 Imports System.IO
+
 Public Class EventsMonitorForm
 
     Private Declare Function AddClipboardFormatListener Lib "user32.dll" (hWnd As IntPtr) As Boolean
