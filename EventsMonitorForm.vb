@@ -179,7 +179,7 @@ Public Class EventsMonitorForm
         Dim FilePath As String = Me.SaveDialog.FileName
         Dim rows As DataGridViewRowCollection = Me.TableGrid.Rows
         Using FileWriter As New System.IO.StreamWriter(FilePath)
-            FileWriter.WriteLine(ProgramName + Environment.NewLine)
+        FileWriter.WriteLine("Events Monitor" + Environment.NewLine)
             For Each row In rows
                 FileWriter.WriteLine(row.Cells(0).Value + Environment.NewLine + row.Cells(1).Value + Environment.NewLine)
             Next row
