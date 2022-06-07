@@ -25,8 +25,7 @@ Public Class EventsMonitorForm
     Private Const MAPVK_VK_TO_CHAR As Int32 = 2&
     Private KBHook As Int32 = 0
     Private MSHook As Int32 = 0
-    Private ReadOnly ProgramName As String = "Events Monitor" + Environment.NewLine + "Version: 1.0.8"
-    Private ReadOnly Info As String = ProgramName + Environment.NewLine + "Developer: Al Armato" + Environment.NewLine + "Language: Visual Basic .NET"
+    Private ReadOnly Info As String = "Events Monitor" + Environment.NewLine + "Developer: zyzalfors" + Environment.NewLine + "Language: Visual Basic .NET"
 
     Public Structure KBDLLHOOKSTRUCT
         Public vkCode As Int32
