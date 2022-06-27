@@ -1,4 +1,4 @@
-﻿Imports System.Collections.Specialized
+Imports System.Collections.Specialized
 Imports System.IO
 
 Public Class EventsMonitorForm
@@ -25,7 +25,7 @@ Public Class EventsMonitorForm
     Private Const MAPVK_VK_TO_CHAR As Int32 = 2&
     Private KBHook As Int32 = 0
     Private MSHook As Int32 = 0
-    Private ReadOnly Info As String = "Events Monitor" + Environment.NewLine + "Developer: zyzalfors" + Environment.NewLine + "Language: Visual Basic .NET"
+    Private ReadOnly Info As String = "Events Monitor v1.0.8" + Environment.NewLine + "Developer: zyzalfors" + Environment.NewLine + "Language: Visual Basic .NET"
 
     Public Structure KBDLLHOOKSTRUCT
         Public vkCode As Int32
@@ -179,7 +179,7 @@ Public Class EventsMonitorForm
         Dim FilePath As String = Me.SaveDialog.FileName
         Dim rows As DataGridViewRowCollection = Me.TableGrid.Rows
         Using FileWriter As New System.IO.StreamWriter(FilePath)
-        FileWriter.WriteLine("Events Monitor" + Environment.NewLine)
+            FileWriter.WriteLine("Events Monitor v1.0.8" + Environment.NewLine)
             For Each row In rows
                 FileWriter.WriteLine(row.Cells(0).Value + Environment.NewLine + row.Cells(1).Value + Environment.NewLine)
             Next row
