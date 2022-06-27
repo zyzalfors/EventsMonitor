@@ -153,7 +153,7 @@ Public Class EventsMonitorForm
     Private Sub StartEndDirMonitoring(sender As Object, e As EventArgs) Handles MonitorDirCheck.Click
         If Me.MonitorDirCheck.Checked Then
             Dim path As String = FormatPath(Me.DirText.Text.Trim())
-            If (Directory.Exists(path)) Then
+            If Directory.Exists(path) Then
                 Me.FileSystemListener.Path = path
                 Me.FileSystemListener.EnableRaisingEvents = True
             Else
